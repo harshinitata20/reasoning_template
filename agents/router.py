@@ -5,7 +5,7 @@ import yaml
 from pathlib import Path
 from graph.state import AgentState
 from prompts.router import build_router_prompt
-from ollama import get_llm
+from llm import get_llm
 
 logger = logging.getLogger(__name__)
 

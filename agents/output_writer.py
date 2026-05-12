@@ -3,7 +3,7 @@
 import logging
 from graph.state import AgentState
 from prompts.output_writer import build_output_writer_prompt
-from ollama import get_llm
+from llm import get_llm
 
 logger = logging.getLogger(__name__)
 

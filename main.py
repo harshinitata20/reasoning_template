@@ -119,8 +119,8 @@ def main():
         logger.info(f"Starting pipeline with query: {args.query}")
         logger.info(f"Domain hint: {args.domain or 'auto-detect'}")
         logger.info(f"Context: {context}")
-        logger.info(f"Ollama server: {settings.OLLAMA_BASE_URL}")
-        logger.info(f"Model: {settings.OLLAMA_MODEL}")
+        logger.info(f"vLLM server: {settings.VLLM_BASE_URL}")
+        logger.info(f"Model: {settings.VLLM_MODEL}")
     
     try:
         # Run the pipeline

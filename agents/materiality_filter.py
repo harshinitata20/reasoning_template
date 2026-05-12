@@ -3,7 +3,7 @@
 import logging
 from graph.state import AgentState
 from prompts.materiality_filter import build_materiality_filter_prompt
-from ollama import get_llm
+from llm import get_llm
 from config.settings import settings
 import json
 

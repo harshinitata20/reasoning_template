@@ -1,4 +1,4 @@
-"""Ollama client adapter used by all agents."""
+"""vLLM client adapter used by all agents."""
 
 from __future__ import annotations
 
@@ -17,12 +17,12 @@ class LLMResponse:
     content: str
 
 
-class OllamaClient:
-    """Minimal OpenAI-compatible Ollama client."""
+class VLLMClient:
+    """Minimal OpenAI-compatible vLLM client."""
 
     def __init__(self, base_url: Optional[str] = None, model: Optional[str] = None):
-        self.base_url = base_url or settings.OLLAMA_BASE_URL
-        self.model = model or settings.OLLAMA_MODEL
+        self.base_url = base_url or settings.VLLM_BASE_URL
+        self.model = model or settings.VLLM_MODEL
 
     def _serialize_messages(self, messages: Iterable[BaseMessage]) -> list[dict[str, str]]:
         payload: list[dict[str, str]] = []
@@ -42,10 +42,10 @@ class OllamaClient:
         payload = {
             "model": self.model,
             "messages": self._serialize_messages(messages),
-            "temperature": settings.OLLAMA_TEMPERATURE,
-            "max_tokens": settings.OLLAMA_MAX_TOKENS,
+            "temperature": settings.VLLM_TEMPERATURE,
+            "max_tokens": settings.VLLM_MAX_TOKENS,
         }
-        response = requests.post(self.base_url, json=payload, timeout=settings.OLLAMA_TIMEOUT_SECONDS)
+        response = requests.post(self.base_url, json=payload, timeout=settings.VLLM_TIMEOUT_SECONDS)
         response.raise_for_status()
         data: dict[str, Any] = response.json()
         content = data["choices"][0]["message"]["content"]
@@ -117,13 +117,13 @@ class LocalFallbackClient:
 
 
 class LLMWrapper:
-    """Wrapper that prefers Ollama but can fall back to a local client.
+    """Wrapper that prefers vLLM but can fall back to a local client.
 
     Behavior controlled by `settings.USE_LOCAL_FALLBACK` and `settings.FALLBACK_ON_ERROR`.
     """
 
     def __init__(self):
-        self._ollama = OllamaClient()
+        self._vllm = VLLMClient()
         self._local = LocalFallbackClient()
 
     def invoke(self, messages: Iterable[BaseMessage]) -> LLMResponse:
@@ -132,7 +132,7 @@ class LLMWrapper:
             return self._local.invoke(messages)
 
         try:
-            return self._ollama.invoke(messages)
+            return self._vllm.invoke(messages)
         except Exception:
             if settings.FALLBACK_ON_ERROR:
                 return self._local.invoke(messages)
@@ -143,7 +143,7 @@ class LLMWrapper:
             return await self._local.ainvoke(messages)
 
         try:
-            return await self._ollama.ainvoke(messages)
+            return await self._vllm.ainvoke(messages)
         except Exception:
             if settings.FALLBACK_ON_ERROR:
                 return await self._local.ainvoke(messages)

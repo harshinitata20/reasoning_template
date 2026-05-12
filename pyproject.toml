@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "reasoning-template"
 version = "0.1.0"
-description = "Domain-agnostic agentic reasoning pipeline with Ollama"
+description = "Domain-agnostic agentic reasoning pipeline with vLLM"
 requires-python = ">=3.10"
 authors = [{name = "Harshini", email = "harshinitata05@gmail.com"}]
 

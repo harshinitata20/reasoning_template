@@ -1,6 +1,6 @@
 # Reasoning Template
 
-A multi-agent LLM reasoning pipeline for structured analysis and decision-making, powered by **LangGraph** and **Ollama**.
+A multi-agent LLM reasoning pipeline for structured analysis and decision-making, powered by **LangGraph** and **vLLM**.
 
 ## Overview
 
@@ -21,7 +21,7 @@ Perfect for compliance analysis, risk assessment, audit workflows, and custom re
 ✅ **Structured Reasoning** - XML-formatted thinking phases capturing known facts, assumptions, and missing info  
 ✅ **Materiality Scoring** - Automatic ranking of findings (1-5 scale) with configurable thresholds  
 ✅ **Risk Analysis** - Second-order reasoning to identify cascading risks and dependencies  
-✅ **Ollama Integration** - Uses local/remote Ollama servers with fallback to deterministic responses  
+✅ **vLLM Integration** - Uses local/remote vLLM servers with fallback to deterministic responses  
 ✅ **CLI Entry Point** - Production-ready command-line interface with multiple output modes  
 ✅ **JSON Output** - Structured output schema for programmatic consumption  
 
@@ -29,7 +29,7 @@ Perfect for compliance analysis, risk assessment, audit workflows, and custom re
 
 ### Prerequisites
 - Python 3.13+
-- Ollama server (local or remote) or fallback mode for development
+- vLLM server (local or remote) or fallback mode for development
 
 ### Setup
 
@@ -44,14 +44,14 @@ Perfect for compliance analysis, risk assessment, audit workflows, and custom re
    pip install -r requirements.txt
    ```
 
-3. **Configure Ollama connection** (optional - uses defaults if not set)
+3. **Configure vLLM connection** (optional - uses defaults if not set)
    ```bash
    cp .env.example .env
    ```
-   Edit `.env` with your Ollama server details:
+   Edit `.env` with your vLLM server details:
    ```
-   OLLAMA_URL=http://10.88.0.201:11434/api/chat
-   OLLAMA_MODEL=qwen3.5:9b
+   vLLM_URL=http://10.88.0.201:11434/api/chat
+   vLLM_MODEL=qwen3.5:9b
    ```
 
 ## Quick Start
@@ -98,14 +98,14 @@ Shows all tools available by domain.
 
 ### Environment Variables (`.env`)
 ```ini
-# Ollama Server
-OLLAMA_URL=http://10.88.0.201:11434/api/chat
-OLLAMA_MODEL=qwen3.5:9b
+# vLLM Server
+vLLM_URL=http://10.88.0.201:11434/api/chat
+vLLM_MODEL=qwen3.5:9b
 
 # Model Parameters
-OLLAMA_TEMPERATURE=0.2
-OLLAMA_MAX_TOKENS=2048
-OLLAMA_TIMEOUT_SECONDS=300
+vLLM_TEMPERATURE=0.2
+vLLM_MAX_TOKENS=2048
+vLLM_TIMEOUT_SECONDS=300
 
 # Fallback Behavior
 USE_LOCAL_FALLBACK=False
@@ -128,7 +128,7 @@ Edit `config/settings.py` for permanent configuration changes.
 ```
 reasoning_template/
 ├── main.py                 # CLI entry point
-├── ollama.py              # Ollama client adapter & LLM wrapper
+├── vLLM.py              # vLLM client adapter & LLM wrapper
 ├── config/
 │   ├── settings.py        # Pydantic-based configuration
 │   └── domains.yaml       # Domain definitions
@@ -228,7 +228,7 @@ python main.py "Test query" --domain my_domain
 ```
 
 ### LLM Integration
-- **Primary**: Ollama server (local or remote) via OpenAI-compatible `/api/chat` endpoint
+- **Primary**: vLLM server (local or remote) via OpenAI-compatible `/api/chat` endpoint
 - **Fallback**: Deterministic local client (development mode)
 - **Model**: qwen3.5:9b (9.7B parameters, optimized for reasoning)
 
@@ -269,26 +269,26 @@ python main.py "Test query" --domain my_domain
 ## Troubleshooting
 
 ### Issue: "404 on /v1 endpoint"
-**Solution**: Update `.env` with correct Ollama endpoint:
+**Solution**: Update `.env` with correct vLLM endpoint:
 ```ini
-OLLAMA_URL=http://10.88.0.201:11434/api/chat
+vLLM_URL=http://10.88.0.201:11434/api/chat
 ```
 
-### Issue: "TimeoutError" from Ollama
+### Issue: "TimeoutError" from vLLM
 **Solution**: Increase timeout in `.env`:
 ```ini
-OLLAMA_TIMEOUT_SECONDS=300
+vLLM_TIMEOUT_SECONDS=300
 ```
 
 ### Issue: Model not found
-**Solution**: List available Ollama models:
+**Solution**: List available vLLM models:
 ```bash
 curl http://10.88.0.201:11434/api/tags
 ```
-Update `OLLAMA_MODEL` in `.env` to available model.
+Update `vLLM_MODEL` in `.env` to available model.
 
 ### Issue: Fallback to local client (no real LLM responses)
-**Solution**: Verify Ollama server is running and reachable:
+**Solution**: Verify vLLM server is running and reachable:
 ```bash
 curl http://10.88.0.201:11434/api/chat -X POST -d '{"model":"qwen3.5:9b","messages":[{"role":"user","content":"test"}]}'
 ```
@@ -372,4 +372,4 @@ For issues or questions:
 
 ---
 
-**Built with ❤️ using LangGraph and Ollama**
+**Built with ❤️ using LangGraph and vLLM**

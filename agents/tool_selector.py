@@ -3,7 +3,7 @@
 import logging
 from graph.state import AgentState
 from prompts.tool_selector import build_tool_selector_prompt
-from ollama import get_llm
+from llm import get_llm
 from tools.registry import ToolRegistry
 
 logger = logging.getLogger(__name__)

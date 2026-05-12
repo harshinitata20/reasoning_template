@@ -3,7 +3,7 @@
 import logging
 from graph.state import AgentState
 from prompts.second_order import build_second_order_prompt
-from ollama import get_llm
+from llm import get_llm
 import json
 
 logger = logging.getLogger(__name__)

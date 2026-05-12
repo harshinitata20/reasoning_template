@@ -3,7 +3,7 @@
 import logging
 from graph.state import AgentState
 from prompts.think_phase import build_think_phase_prompt
-from ollama import get_llm
+from llm import get_llm
 import re
 
 logger = logging.getLogger(__name__)
